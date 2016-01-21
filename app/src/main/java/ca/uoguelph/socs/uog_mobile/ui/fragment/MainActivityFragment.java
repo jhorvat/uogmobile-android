@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import ca.uoguelph.socs.uog_mobile.R;
@@ -15,8 +16,7 @@ import ca.uoguelph.socs.uog_mobile.R;
  */
 public class MainActivityFragment extends Fragment {
 
-    @Bind(R.id.webview)
-    WebView mWebView;
+    @Bind(R.id.webview) WebView mWebView;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +30,14 @@ public class MainActivityFragment extends Fragment {
 
     @Override public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mWebView.loadUrl("https://webadvisor.uoguelph.ca/WebAdvisor/WebAdvisor");
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setBuiltInZoomControls(true);
+        mWebView.getSettings().setDisplayZoomControls(false);
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                return false;
+            }
+        });
+        mWebView.loadUrl("https://webadvisor.uoguelph.ca/WebAdvisor/WebAdvisor?CONSTITUENCY=WBDF&type=P&pid=UT-LGRQ&PROCESS=-UTAUTH01");
     }
 }
