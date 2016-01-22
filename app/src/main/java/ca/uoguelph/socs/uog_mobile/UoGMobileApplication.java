@@ -2,8 +2,8 @@ package ca.uoguelph.socs.uog_mobile;
 
 import android.app.Application;
 import ca.uoguelph.socs.uog_mobile.injection.component.ApplicationComponent;
-import ca.uoguelph.socs.uog_mobile.injection.module.ApplicationModule;
 import ca.uoguelph.socs.uog_mobile.injection.component.DaggerApplicationComponent;
+import ca.uoguelph.socs.uog_mobile.injection.module.ApplicationModule;
 import timber.log.Timber;
 
 /**

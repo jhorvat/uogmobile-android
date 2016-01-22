@@ -1,6 +1,5 @@
 package ca.uoguelph.socs.uog_mobile.ui.activity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,11 +7,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import ca.uoguelph.socs.uog_mobile.R;
-import javax.inject.Inject;
-import timber.log.Timber;
+import ca.uoguelph.socs.uog_mobile.injection.HasComponent;
+import ca.uoguelph.socs.uog_mobile.injection.component.DaggerWebAdvisorComponent;
+import ca.uoguelph.socs.uog_mobile.injection.component.WebAdvisorComponent;
+import ca.uoguelph.socs.uog_mobile.injection.module.WebAdvisorModule;
 
-public class MainActivity extends BaseActivity {
-    @Inject SharedPreferences mSharedPrefs;
+public class WebAdvisorActivity extends BaseActivity implements HasComponent {
+
+    private WebAdvisorComponent webAdvisorComponent;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +22,8 @@ public class MainActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Timber.d("MainActivity %s", mSharedPrefs);
+        this.initializeInjection();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(
               view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -46,5 +49,17 @@ public class MainActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override public Object getComponent() {
+        return this.webAdvisorComponent;
+    }
+
+    private void initializeInjection() {
+        this.webAdvisorComponent = DaggerWebAdvisorComponent.builder()
+              .applicationComponent(getApplicationComponent())
+              .activityModule(getActivityModule())
+              .webAdvisorModule(new WebAdvisorModule())
+              .build();
     }
 }
