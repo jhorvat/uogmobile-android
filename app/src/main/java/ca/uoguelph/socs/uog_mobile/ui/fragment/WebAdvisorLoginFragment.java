@@ -1,7 +1,6 @@
 package ca.uoguelph.socs.uog_mobile.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ public class WebAdvisorLoginFragment extends BaseFragment {
 
     @Inject String mockString;
 
-    @Bind(R.id.webview) WebView mWebView;
+    @Bind(R.id.webview) WebView webView;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,15 +41,15 @@ public class WebAdvisorLoginFragment extends BaseFragment {
 
     @Override public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.getSettings().setBuiltInZoomControls(true);
-        mWebView.getSettings().setDisplayZoomControls(false);
-        mWebView.setWebViewClient(new WebViewClient() {
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDisplayZoomControls(false);
+        webView.setWebViewClient(new WebViewClient() {
             @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 return false;
             }
         });
-        mWebView.loadUrl(
+        webView.loadUrl(
               "https://webadvisor.uoguelph.ca/WebAdvisor/WebAdvisor?CONSTITUENCY=WBDF&type=P&pid=UT-LGRQ&PROCESS=-UTAUTH01");
     }
 }

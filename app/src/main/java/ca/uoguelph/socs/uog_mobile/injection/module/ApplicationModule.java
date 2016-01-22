@@ -12,17 +12,17 @@ import javax.inject.Singleton;
  * Created by julianhorvat on 2016-01-20.
  */
 @Singleton @Module public class ApplicationModule {
-    private UoGMobileApplication mApp;
+    private UoGMobileApplication app;
 
     public ApplicationModule(UoGMobileApplication app) {
-        mApp = app;
+        this.app = app;
     }
 
     @Provides @Singleton Context provideApplicationContext() {
-        return this.mApp;
+        return this.app;
     }
 
     @Provides @Singleton SharedPreferences provideSharedPrefs() {
-        return PreferenceManager.getDefaultSharedPreferences(mApp);
+        return PreferenceManager.getDefaultSharedPreferences(app);
     }
 }

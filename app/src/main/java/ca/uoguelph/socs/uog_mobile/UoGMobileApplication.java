@@ -10,7 +10,7 @@ import timber.log.Timber;
  * Created by julianhorvat on 2016-01-20.
  */
 public class UoGMobileApplication extends Application {
-    private ApplicationComponent mComponent;
+    private ApplicationComponent component;
 
     @Override public void onCreate() {
         super.onCreate();
@@ -19,7 +19,7 @@ public class UoGMobileApplication extends Application {
             Timber.plant(new Timber.DebugTree());
         }
 
-        mComponent = DaggerApplicationComponent.builder()
+        component = DaggerApplicationComponent.builder()
               .applicationModule(new ApplicationModule(this))
               .build();
 
@@ -27,6 +27,6 @@ public class UoGMobileApplication extends Application {
     }
 
     public ApplicationComponent getApplicationComponent() {
-        return mComponent;
+        return component;
     }
 }
