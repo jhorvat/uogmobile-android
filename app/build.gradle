@@ -31,6 +31,7 @@ android {
 dependencies {
   final SUPPORT_LIBRARY_VERSION = '23.1.1'
   final DAGGER_VERSION = '2.0.1'
+  final RETROFIT_VERSION = '2.0.0-beta3'
 
   compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -49,6 +50,10 @@ dependencies {
 
   compile 'io.reactivex:rxandroid:1.0.1'
   compile 'io.reactivex:rxjava:1.1.0'
+
+  compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+  compile "com.squareup.retrofit2:converter-moshi:$RETROFIT_VERSION"
+  compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
 
   testCompile 'junit:junit:4.12'
 }
