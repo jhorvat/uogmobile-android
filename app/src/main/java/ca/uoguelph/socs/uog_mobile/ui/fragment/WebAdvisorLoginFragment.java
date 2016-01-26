@@ -1,5 +1,6 @@
 package ca.uoguelph.socs.uog_mobile.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,8 +15,7 @@ import ca.uoguelph.socs.uog_mobile.R;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.WebAdvisorService;
 import ca.uoguelph.socs.uog_mobile.injection.component.WebAdvisorComponent;
 import javax.inject.Inject;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.Subscription;
 import timber.log.Timber;
 
 /**
@@ -34,6 +34,7 @@ public class WebAdvisorLoginFragment extends BaseFragment {
     @Bind(R.id.webview) WebView webView;
 
     private CookieManager cookieManager;
+    private Subscription webAdvisorSub;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +73,12 @@ public class WebAdvisorLoginFragment extends BaseFragment {
         }
     }
 
-    private void loadLogin() {
+    @Override public void onPause() {
+        super.onPause();
+        webAdvisorSub.unsubscribe();
+    }
+
+    @SuppressLint("SetJavaScriptEnabled") private void loadLogin() {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
@@ -87,18 +93,12 @@ public class WebAdvisorLoginFragment extends BaseFragment {
                     String cookie = CookieManager.getInstance().getCookie(url);
                     Timber.d("Page loaded, %s \n Cookies: %s", url, cookie);
 
-                    // TODO: Need to migrate to Rx and actually do this right
-                    webAdvisorService.login(cookie, new Callback<String>() {
-                        @Override public void onResponse(Response<String> response) {
-                            if (response.isSuccess()) {
-                                Timber.d("LOGGED IN! %s", response.body());
-                            }
-                        }
-
-                        @Override public void onFailure(Throwable t) {
-                            Timber.d(t, "Login failed");
-                        }
-                    });
+                    webAdvisorSub = webAdvisorService.login(cookie).flatMap(
+                          user -> webAdvisorService.getSchedule())
+                          //.subscribeOn(Schedulers.newThread())
+                          //.observeOn(AndroidSchedulers.mainThread())
+                          .subscribe(schedule -> Timber.d(schedule.toString()),
+                                throwable -> Timber.d(throwable, "Something failed"));
                 }
             }
         });

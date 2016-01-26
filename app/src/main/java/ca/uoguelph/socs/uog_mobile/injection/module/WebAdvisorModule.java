@@ -2,7 +2,7 @@ package ca.uoguelph.socs.uog_mobile.injection.module;
 
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
+import javax.inject.Named;
 import retrofit2.Retrofit;
 
 /**
@@ -14,7 +14,12 @@ import retrofit2.Retrofit;
         return "Injected!";
     }
 
-    @Provides Retrofit provideRetrofit(Retrofit.Builder builder) {
-        return builder.baseUrl("http://192.168.0.105:5000/webadvisor/").build();
+    @Provides @Named("BASE_URL") String provideBaseUrl() {
+        return "http://10.11.219.179:5000/webadvisor/";
+    }
+
+    @Provides Retrofit provideRetrofit(Retrofit.Builder builder,
+          @Named("BASE_URL") String baseUrl) {
+        return builder.baseUrl(baseUrl).build();
     }
 }
