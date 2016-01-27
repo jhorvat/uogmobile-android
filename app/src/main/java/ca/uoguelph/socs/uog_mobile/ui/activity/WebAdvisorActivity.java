@@ -25,10 +25,11 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
         this.initializeInjection();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(
-              view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null)
-                    .show());
+        fab.setOnClickListener(view -> Snackbar.make(view,
+                                                     "Replace with your own action",
+                                                     Snackbar.LENGTH_LONG)
+                                               .setAction("Action", null)
+                                               .show());
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,9 +58,10 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
 
     private void initializeInjection() {
         this.webAdvisorComponent = DaggerWebAdvisorComponent.builder()
-              .applicationComponent(getApplicationComponent())
-              .activityModule(getActivityModule())
-              .webAdvisorModule(new WebAdvisorModule())
-              .build();
+                                                            .applicationComponent(
+                                                                  getApplicationComponent())
+                                                            .activityModule(getActivityModule())
+                                                            .webAdvisorModule(new WebAdvisorModule())
+                                                            .build();
     }
 }

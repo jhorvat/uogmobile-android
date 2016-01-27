@@ -20,8 +20,8 @@ public class UoGMobileApplication extends Application {
         }
 
         component = DaggerApplicationComponent.builder()
-              .applicationModule(new ApplicationModule(this))
-              .build();
+                                              .applicationModule(new ApplicationModule(this))
+                                              .build();
 
         Timber.d("Application started, AppComponent built");
     }

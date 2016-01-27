@@ -43,6 +43,7 @@ import retrofit2.RxJavaCallAdapterFactory;
 
     @Provides OkHttpClient provideHttpClient(OkCookieManager cookieManager,
           LoggingInterceptor loggingInterceptor) {
+
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.cookieJar(cookieManager);
         builder.addInterceptor(loggingInterceptor);
@@ -61,7 +62,7 @@ import retrofit2.RxJavaCallAdapterFactory;
     @Provides Retrofit.Builder provideRetrofitBuilder(OkHttpClient client,
           Converter.Factory converter, CallAdapter.Factory callAdapter) {
         return new Retrofit.Builder().addConverterFactory(converter)
-              .addCallAdapterFactory(callAdapter)
-              .client(client);
+                                     .addCallAdapterFactory(callAdapter)
+                                     .client(client);
     }
 }

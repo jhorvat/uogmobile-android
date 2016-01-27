@@ -93,12 +93,11 @@ public class WebAdvisorLoginFragment extends BaseFragment {
                     String cookie = CookieManager.getInstance().getCookie(url);
                     Timber.d("Page loaded, %s \n Cookies: %s", url, cookie);
 
-                    webAdvisorSub = webAdvisorService.login(cookie).flatMap(
-                          user -> webAdvisorService.getSchedule())
-                          //.subscribeOn(Schedulers.newThread())
-                          //.observeOn(AndroidSchedulers.mainThread())
-                          .subscribe(schedule -> Timber.d(schedule.toString()),
-                                throwable -> Timber.d(throwable, "Something failed"));
+                    webAdvisorSub = webAdvisorService.login(cookie)
+                                                     .flatMap(user -> webAdvisorService.getSchedule())
+                                                     .subscribe(schedule -> Timber.d(schedule.toString()),
+                                                                throwable -> Timber.d(throwable,
+                                                                                      "Something failed"));
                 }
             }
         });
