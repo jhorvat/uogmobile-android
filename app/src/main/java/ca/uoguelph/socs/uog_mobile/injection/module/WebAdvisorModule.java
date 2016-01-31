@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
     }
 
     @Provides @Named("BASE_URL") String provideBaseUrl() {
-        return "http://10.11.221.76:5000/webadvisor/";
+        return "http://131.104.49.59:5000/webadvisor/";
     }
 
     @Provides Retrofit provideRetrofit(Retrofit.Builder builder,

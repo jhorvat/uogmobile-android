@@ -13,7 +13,7 @@ import javax.inject.Singleton;
 import okhttp3.OkHttpClient;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
-import retrofit2.MoshiConverterFactory;
+import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
 import retrofit2.RxJavaCallAdapterFactory;
 
@@ -52,7 +52,7 @@ import retrofit2.RxJavaCallAdapterFactory;
     }
 
     @Provides Converter.Factory provideConverter() {
-        return MoshiConverterFactory.create();
+        return GsonConverterFactory.create();
     }
 
     @Provides CallAdapter.Factory provideCallAdapter() {

@@ -1,9 +1,37 @@
 package ca.uoguelph.socs.uog_mobile.data.web_advisor.models;
 
+import auto.parcelgson.AutoParcelGson;
+import java.util.ArrayList;
+
 /**
  * Created by julianhorvat on 2016-01-26.
  */
-public class Timeslot {
-    String location, time;
-    String[] days;
+@AutoParcelGson public abstract class Timeslot {
+    abstract String location();
+
+    abstract String time();
+
+    abstract ArrayList<String> days();
+
+    public static Timeslot create(String location, String time, ArrayList<String> days) {
+        return builder().location(location).time(time).days(days).build();
+    }
+
+    public static Builder builder() {
+        return new AutoParcelGson_Timeslot.Builder();
+    }
+
+    @AutoParcelGson.Builder public interface Builder {
+        Builder location(String l);
+
+        Builder time(String t);
+
+        Builder days(ArrayList<String> d);
+
+        Timeslot build();
+    }
 }
+//public class Timeslot {
+//    String location, time;
+//    String[] days;
+//}

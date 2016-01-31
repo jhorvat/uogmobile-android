@@ -1,7 +1,7 @@
 package ca.uoguelph.socs.uog_mobile.data.web_advisor;
 
 import ca.uoguelph.socs.uog_mobile.data.RxUtils;
-import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.CookieString;
+import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Cookie;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Schedule;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.User;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
@@ -23,11 +23,7 @@ import rx.Observable;
     }
 
     public Observable<User> login(String cookies) {
-        CookieString cookieString = new CookieString();
-        cookieString.cookie = cookies;
-
-        //return this.service.login(cookieString);
-        return this.service.login(cookieString).compose(RxUtils.applySchedulers());
+        return this.service.login(Cookie.create(cookies)).compose(RxUtils.applySchedulers());
     }
 
     public Observable<Schedule> getSchedule() {
@@ -36,7 +32,7 @@ import rx.Observable;
     }
 
     private interface Api {
-        @POST("login") Observable<User> login(@Body CookieString cookieString);
+        @POST("login") Observable<User> login(@Body Cookie c);
 
         @GET("schedule") Observable<Schedule> schedule();
     }

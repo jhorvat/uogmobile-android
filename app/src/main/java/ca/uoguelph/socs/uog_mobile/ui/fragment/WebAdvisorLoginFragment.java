@@ -75,6 +75,7 @@ public class WebAdvisorLoginFragment extends BaseFragment {
 
     @Override public void onPause() {
         super.onPause();
+
         webAdvisorSub.unsubscribe();
     }
 

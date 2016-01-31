@@ -52,8 +52,11 @@ dependencies {
   compile 'io.reactivex:rxjava:1.1.0'
 
   compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
-  compile "com.squareup.retrofit2:converter-moshi:$RETROFIT_VERSION"
+  compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
   compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
+
+  compile 'me.tatarka:auto-parcel-gson:0.1'
+  apt 'me.tatarka:auto-parcel-gson-processor:0.1'
 
   testCompile 'junit:junit:4.12'
 }
