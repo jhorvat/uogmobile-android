@@ -19,15 +19,17 @@ import timber.log.Timber;
         Request request = chain.request();
 
         long t1 = System.nanoTime();
-        Timber.v("Sending request " + request.url() + " on " + chain.connection() + "\n"
-                       + request.headers());
+        Timber.v("Sending request %s\n%s\n%s", request.url(), request.headers(), request.body());
 
         Response response = chain.proceed(request);
         if (response != null) {
             long t2 = System.nanoTime();
-            Timber.v("Received response for " + response.request().url() + " in " + (t2 - t1) / 1e6d
-                           + "ms\n" + "HTTP " + response.code() + "(" + response.message() + ")\n"
-                           + "HEADERS:\n" + response.headers());
+            Timber.v("Received response for %s in %sms\nHTTP %d(%s)\nHEADERS:\n%s",
+                     response.request().url(),
+                     (t2 - t1) / 1e6d,
+                     response.code(),
+                     response.message(),
+                     response.headers());
         }
         return response;
     }

@@ -1,35 +1,42 @@
 package ca.uoguelph.socs.uog_mobile.ui.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.uoguelph.socs.uog_mobile.R;
+import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.User;
+import ca.uoguelph.socs.uog_mobile.events.LoggedIn;
 import ca.uoguelph.socs.uog_mobile.injection.HasComponent;
 import ca.uoguelph.socs.uog_mobile.injection.component.DaggerWebAdvisorComponent;
 import ca.uoguelph.socs.uog_mobile.injection.component.WebAdvisorComponent;
 import ca.uoguelph.socs.uog_mobile.injection.module.WebAdvisorModule;
+import ca.uoguelph.socs.uog_mobile.ui.fragment.WebAdvisorLoginFragment;
+import ca.uoguelph.socs.uog_mobile.ui.fragment.WebAdvisorScheduleFragment;
+import com.squareup.otto.Subscribe;
+import timber.log.Timber;
 
 public class WebAdvisorActivity extends BaseActivity implements HasComponent {
+
+    private static final String TAG_WA_LOGIN = "WALoginFrag";
+    private static final String TAG_WA_SCHEDULE = "WAScheduleFrag";
+
+    @Bind(R.id.toolbar) Toolbar toolbar;
 
     private WebAdvisorComponent webAdvisorComponent;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
         this.initializeInjection();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view,
-                                                     "Replace with your own action",
-                                                     Snackbar.LENGTH_LONG)
-                                               .setAction("Action", null)
-                                               .show());
+        addFragment(R.id.frag_container, TAG_WA_LOGIN, new WebAdvisorLoginFragment());
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,6 +61,11 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
 
     @Override public Object getComponent() {
         return this.webAdvisorComponent;
+    }
+
+    @Subscribe public void onLoggedIn(LoggedIn e) {
+        Timber.d("WebAdvisorActivity; we're logged in");
+        replaceFragment(R.id.frag_container, TAG_WA_SCHEDULE, new WebAdvisorScheduleFragment());
     }
 
     private void initializeInjection() {

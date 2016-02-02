@@ -4,6 +4,7 @@ import ca.uoguelph.socs.uog_mobile.injection.module.ActivityModule;
 import ca.uoguelph.socs.uog_mobile.injection.module.WebAdvisorModule;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
 import ca.uoguelph.socs.uog_mobile.ui.fragment.WebAdvisorLoginFragment;
+import ca.uoguelph.socs.uog_mobile.ui.fragment.WebAdvisorScheduleFragment;
 import dagger.Component;
 
 /**
@@ -14,4 +15,6 @@ import dagger.Component;
 }) public interface WebAdvisorComponent {
 
     void inject(WebAdvisorLoginFragment loginFragment);
+
+    void inject(WebAdvisorScheduleFragment scheduleFragment);
 }

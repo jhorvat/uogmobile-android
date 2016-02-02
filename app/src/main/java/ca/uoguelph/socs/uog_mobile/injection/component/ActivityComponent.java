@@ -1,6 +1,6 @@
 package ca.uoguelph.socs.uog_mobile.injection.component;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Context;
 import ca.uoguelph.socs.uog_mobile.injection.module.ActivityModule;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
 import dagger.Component;
@@ -11,6 +11,6 @@ import dagger.Component;
 @PerActivity @Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
 public interface ActivityComponent {
     //Exposed to sub-graphs.
-    AppCompatActivity activity();
+    Context activity();
 }
 

@@ -4,9 +4,14 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.webkit.CookieManager;
+import auto.parcelgson.gson.AutoParcelGsonTypeAdapterFactory;
 import ca.uoguelph.socs.uog_mobile.UoGMobileApplication;
 import ca.uoguelph.socs.uog_mobile.data.net.LoggingInterceptor;
 import ca.uoguelph.socs.uog_mobile.data.net.OkCookieManager;
+import ca.uoguelph.socs.uog_mobile.util.ThreadAwareBus;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.squareup.otto.Bus;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -35,6 +40,10 @@ import retrofit2.RxJavaCallAdapterFactory;
         return PreferenceManager.getDefaultSharedPreferences(app);
     }
 
+    @Provides @Singleton Bus getBus() {
+        return new ThreadAwareBus();
+    }
+
     @Provides @Singleton CookieManager provideCookieManager() {
         CookieManager manager = CookieManager.getInstance();
         manager.setAcceptCookie(true);
@@ -51,8 +60,13 @@ import retrofit2.RxJavaCallAdapterFactory;
         return builder.build();
     }
 
-    @Provides Converter.Factory provideConverter() {
-        return GsonConverterFactory.create();
+    @Provides @Singleton Gson provideGson() {
+        return new GsonBuilder().registerTypeAdapterFactory(new AutoParcelGsonTypeAdapterFactory())
+                                .create();
+    }
+
+    @Provides Converter.Factory provideConverter(Gson gson) {
+        return GsonConverterFactory.create(gson);
     }
 
     @Provides CallAdapter.Factory provideCallAdapter() {

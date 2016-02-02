@@ -6,15 +6,15 @@ import auto.parcelgson.AutoParcelGson;
  * Created by julianhorvat on 2016-01-26.
  */
 @AutoParcelGson public abstract class Course {
-    abstract String name();
+    public abstract String name();
 
-    abstract boolean de();
+    public abstract boolean de();
 
-    abstract Timeslot lab();
+    public abstract Timeslot lab();
 
-    abstract Timeslot exam();
+    public abstract Timeslot exam();
 
-    abstract Timeslot lecture();
+    public abstract Timeslot lecture();
 
     public static Course create(String name, boolean de, Timeslot lecture, Timeslot lab,
           Timeslot exam) {
