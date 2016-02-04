@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import ca.uoguelph.socs.uog_mobile.UoGMobileApplication;
 import ca.uoguelph.socs.uog_mobile.injection.component.ApplicationComponent;
 import ca.uoguelph.socs.uog_mobile.injection.module.ActivityModule;
-import com.squareup.otto.Bus;
+import ca.uoguelph.socs.uog_mobile.util.RxEventBus;
 import javax.inject.Inject;
 
 /**
@@ -15,7 +15,7 @@ import javax.inject.Inject;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    @Inject Bus bus;
+    @Inject RxEventBus bus;
 
     private FragmentManager supportFragmentManager;
 
@@ -24,7 +24,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.getApplicationComponent().inject(this);
 
         supportFragmentManager = this.getSupportFragmentManager();
-        bus.register(this);
     }
 
     protected void addFragment(int containerViewId, String tag, Fragment fragment) {

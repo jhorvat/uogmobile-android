@@ -8,10 +8,9 @@ import auto.parcelgson.gson.AutoParcelGsonTypeAdapterFactory;
 import ca.uoguelph.socs.uog_mobile.UoGMobileApplication;
 import ca.uoguelph.socs.uog_mobile.data.net.LoggingInterceptor;
 import ca.uoguelph.socs.uog_mobile.data.net.OkCookieManager;
-import ca.uoguelph.socs.uog_mobile.util.ThreadAwareBus;
+import ca.uoguelph.socs.uog_mobile.util.RxEventBus;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.squareup.otto.Bus;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -21,6 +20,7 @@ import retrofit2.Converter;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
 import retrofit2.RxJavaCallAdapterFactory;
+import rx.subjects.PublishSubject;
 
 /**
  * Created by julianhorvat on 2016-01-20.
@@ -40,8 +40,8 @@ import retrofit2.RxJavaCallAdapterFactory;
         return PreferenceManager.getDefaultSharedPreferences(app);
     }
 
-    @Provides @Singleton Bus getBus() {
-        return new ThreadAwareBus();
+    @Provides @Singleton RxEventBus getBus() {
+        return new RxEventBus();
     }
 
     @Provides @Singleton CookieManager provideCookieManager() {

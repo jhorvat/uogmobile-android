@@ -1,5 +1,6 @@
 package ca.uoguelph.socs.uog_mobile.presenter;
 
+import ca.uoguelph.socs.uog_mobile.util.RxEventBus;
 import ca.uoguelph.socs.uog_mobile.util.RxUtils;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.WebAdvisorService;
 import ca.uoguelph.socs.uog_mobile.events.LoggedIn;
@@ -14,22 +15,21 @@ import timber.log.Timber;
  */
 @PerActivity public class WebAdvisorLoginPresenter implements Presenter {
     private final WebAdvisorService service;
-    private final Bus bus;
+    private final RxEventBus bus;
 
     private Subscription webAdvisorSub;
 
-    @Inject public WebAdvisorLoginPresenter(WebAdvisorService webAdvisorService, Bus bus) {
+    @Inject public WebAdvisorLoginPresenter(WebAdvisorService webAdvisorService, RxEventBus bus) {
         this.service = webAdvisorService;
         this.bus = bus;
     }
 
     @Override public void onResume() {
-        bus.register(this);
+
     }
 
     @Override public void onPause() {
         RxUtils.unsub(webAdvisorSub);
-        bus.unregister(this);
     }
 
     @Override public void onDestroy() {

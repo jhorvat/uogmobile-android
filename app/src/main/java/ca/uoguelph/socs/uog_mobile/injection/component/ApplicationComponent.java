@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 import android.webkit.CookieManager;
 import ca.uoguelph.socs.uog_mobile.injection.module.ApplicationModule;
 import ca.uoguelph.socs.uog_mobile.ui.activity.BaseActivity;
-import com.squareup.otto.Bus;
+import ca.uoguelph.socs.uog_mobile.util.RxEventBus;
 import dagger.Component;
 import javax.inject.Singleton;
 import retrofit2.Retrofit;
@@ -24,5 +24,5 @@ import retrofit2.Retrofit;
 
     SharedPreferences prefs();
 
-    Bus bus();
+    RxEventBus bus();
 }
