@@ -20,7 +20,6 @@ import retrofit2.Converter;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
 import retrofit2.RxJavaCallAdapterFactory;
-import rx.subjects.PublishSubject;
 
 /**
  * Created by julianhorvat on 2016-01-20.

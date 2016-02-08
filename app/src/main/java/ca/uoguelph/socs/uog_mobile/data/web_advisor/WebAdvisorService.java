@@ -1,11 +1,11 @@
 package ca.uoguelph.socs.uog_mobile.data.web_advisor;
 
 import android.webkit.CookieManager;
-import ca.uoguelph.socs.uog_mobile.util.RxUtils;
-import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Session;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Schedule;
+import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Session;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.User;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
+import ca.uoguelph.socs.uog_mobile.util.RxUtils;
 import javax.inject.Inject;
 import retrofit2.Retrofit;
 import retrofit2.http.Body;

@@ -6,6 +6,15 @@ import auto.parcelgson.AutoParcelGson;
  * Created by julianhorvat on 2016-01-26.
  */
 @AutoParcelGson public abstract class Course {
+    public static Course create(String name, boolean de, Timeslot lecture, Timeslot lab,
+          Timeslot exam) {
+        return builder().name(name).de(de).lecture(lecture).lab(lab).exam(exam).build();
+    }
+
+    public static Builder builder() {
+        return new AutoParcelGson_Course.Builder();
+    }
+
     public abstract String name();
 
     public abstract boolean de();
@@ -15,15 +24,6 @@ import auto.parcelgson.AutoParcelGson;
     public abstract Timeslot exam();
 
     public abstract Timeslot lecture();
-
-    public static Course create(String name, boolean de, Timeslot lecture, Timeslot lab,
-          Timeslot exam) {
-        return builder().name(name).de(de).lecture(lecture).lab(lab).exam(exam).build();
-    }
-
-    public static Builder builder() {
-        return new AutoParcelGson_Course.Builder();
-    }
 
     @AutoParcelGson.Builder public interface Builder {
         Builder name(String n);

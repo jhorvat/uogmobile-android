@@ -21,7 +21,7 @@ import rx.subjects.Subject;
         subject.onNext(event);
     }
 
-    public <E> Observable<E> subscribe(Class<E> eventClass) {
+    public <E> Observable<E> observeEvent(Class<E> eventClass) {
         return subject.ofType(eventClass).compose(RxUtils.applySchedulers());
     }
 }

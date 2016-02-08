@@ -3,6 +3,7 @@ package ca.uoguelph.socs.uog_mobile.presenter;
 /**
  * Created by julianhorvat on 2016-01-27.
  */
+
 /**
  * Interface representing a Presenter in a model view presenter (MVP) pattern.
  */

@@ -7,10 +7,6 @@ import java.util.ArrayList;
  * Created by julianhorvat on 2016-01-26.
  */
 @AutoParcelGson public abstract class Schedule {
-    public abstract ArrayList<Course> courses();
-
-    public abstract String term();
-
     public static Schedule create(ArrayList<Course> courses, String term) {
         return builder().courses(courses).term(term).build();
     }
@@ -18,6 +14,10 @@ import java.util.ArrayList;
     public static Builder builder() {
         return new AutoParcelGson_Schedule.Builder();
     }
+
+    public abstract ArrayList<Course> courses();
+
+    public abstract String term();
 
     @AutoParcelGson.Builder public interface Builder {
         Builder courses(ArrayList<Course> c);

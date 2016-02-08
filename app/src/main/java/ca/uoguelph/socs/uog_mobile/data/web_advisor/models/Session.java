@@ -7,10 +7,6 @@ import auto.parcelgson.gson.annotations.SerializedName;
  * Created by julianhorvat on 2016-01-25.
  */
 @AutoParcelGson public abstract class Session {
-    abstract String cookie();
-
-    @SerializedName("test_session") abstract boolean testSession();
-
     public static Session create(String c, boolean test) {
         return builder().cookie(c).testSession(test).build();
     }
@@ -22,6 +18,10 @@ import auto.parcelgson.gson.annotations.SerializedName;
     public static Builder builder() {
         return new AutoParcelGson_Session.Builder();
     }
+
+    abstract String cookie();
+
+    @SerializedName("test_session") abstract boolean testSession();
 
     @AutoParcelGson.Builder public interface Builder {
         Builder testSession(boolean test);

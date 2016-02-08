@@ -16,7 +16,6 @@ import ca.uoguelph.socs.uog_mobile.ui.fragment.WebAdvisorLoginFragment;
 import ca.uoguelph.socs.uog_mobile.ui.fragment.WebAdvisorScheduleFragment;
 import ca.uoguelph.socs.uog_mobile.util.RxUtils;
 import rx.Subscription;
-import timber.log.Timber;
 
 public class WebAdvisorActivity extends BaseActivity implements HasComponent {
 
@@ -42,15 +41,14 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
 
     @Override protected void onResume() {
         super.onResume();
-        loggedInSub = bus.subscribe(LoggedIn.class).subscribe(loggedIn -> {
-            Timber.d("WebAdvisorActivity; we're logged in");
+        loggedInSub = bus.observeEvent(LoggedIn.class).subscribe(loggedIn -> {
             replaceFragment(R.id.frag_container, TAG_WA_SCHEDULE, new WebAdvisorScheduleFragment());
         });
     }
 
     @Override protected void onPause() {
         super.onPause();
-        RxUtils.unsub(loggedInSub);
+        RxUtils.resetSub(loggedInSub);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {

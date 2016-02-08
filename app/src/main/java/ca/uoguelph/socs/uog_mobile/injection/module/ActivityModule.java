@@ -6,7 +6,6 @@ import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
 import dagger.Module;
 import dagger.Provides;
 
-
 /**
  * Created by julianhorvat on 2016-01-21.
  */

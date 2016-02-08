@@ -2,6 +2,7 @@ package ca.uoguelph.socs.uog_mobile.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ public class WebAdvisorLoginFragment extends BaseFragment {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getComponent(WebAdvisorComponent.class).inject(this);
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,13 +48,19 @@ public class WebAdvisorLoginFragment extends BaseFragment {
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.getComponent(WebAdvisorComponent.class).inject(this);
 
-        loadLogin();
+        if (Build.VERSION.SDK_INT >= 21) {
+            cookieManager.setAcceptThirdPartyCookies(webView, true);
+            cookieManager.removeAllCookies(value -> loadLogin());
+        } else {
+            cookieManager.removeAllCookie();
+            loadLogin();
+        }
     }
 
     @Override public void onResume() {
         super.onResume();
+
         presenter.onResume();
     }
 
@@ -66,6 +74,8 @@ public class WebAdvisorLoginFragment extends BaseFragment {
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
         webView.setWebViewClient(new WebViewClient() {
+            private boolean loggedIn = false;
+
             @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return true;
@@ -74,11 +84,11 @@ public class WebAdvisorLoginFragment extends BaseFragment {
             @Override public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
-                Timber.d("Page loaded");
-                if (url.startsWith(LOGGED_IN_URL_PREFIX)) {
+                if (url.startsWith(LOGGED_IN_URL_PREFIX) && !loggedIn) {
+                    loggedIn = true;
                     String cookie = cookieManager.getCookie(url);
                     Timber.d("Page loaded, %s \n Cookies: %s", url, cookie);
-                    presenter.loggedIn(cookie);
+                    presenter.login(cookie);
                 }
             }
         });
