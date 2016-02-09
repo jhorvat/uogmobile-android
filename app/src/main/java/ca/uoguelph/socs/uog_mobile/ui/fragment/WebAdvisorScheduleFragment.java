@@ -9,6 +9,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import ca.uoguelph.socs.uog_mobile.R;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.WebAdvisorService;
+import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Course;
 import ca.uoguelph.socs.uog_mobile.injection.component.WebAdvisorComponent;
 import ca.uoguelph.socs.uog_mobile.ui.adapter.ClassScheduleAdapter;
 import javax.inject.Inject;
@@ -46,8 +47,14 @@ public class WebAdvisorScheduleFragment extends BaseFragment {
 
     @Override public void onResume() {
         super.onResume();
-        webAdvisorService.getSchedule()
-                         .subscribe(schedule -> classScheduleAdapter.setClassSchedule(schedule.courses()),
-                                    throwable -> Timber.e(throwable, "Something failed"));
+        webAdvisorService.getSchedule().subscribe(schedule -> {
+            for (Course course : schedule.courses()) {
+                Timber.i("Class %s\n", course.name());
+                Timber.i("Lecture: %s\n", course.lecture());
+                Timber.i("Lab: %s\n", course.lab());
+                Timber.i("Exam: %s\n", course.exam());
+            }
+            classScheduleAdapter.setClassSchedule(schedule.courses());
+        }, throwable -> Timber.e(throwable, "Something failed"));
     }
 }
