@@ -2,8 +2,8 @@
 <android.support.v7.widget.CardView
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:card_view="http://schemas.android.com/apk/res-auto"
+  xmlns:custom="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/card_view"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:layout_margin="8dp"
@@ -24,7 +24,8 @@
       android:layout_height="wrap_content"
       android:paddingBottom="8dp"
       android:paddingTop="24dp"
-      android:textSize="24sp"
+      android:textSize="20sp"
+      android:textStyle="bold"
       tools:text="Placeholder"
       />
 
@@ -32,89 +33,81 @@
       android:id="@+id/text_course_name"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:paddingBottom="24dp"
+      android:paddingBottom="16dp"
       android:textSize="14sp"
       tools:text="Subtext"
       />
 
-    <android.support.v7.widget.GridLayout
-      xmlns:grid="http://schemas.android.com/apk/res-auto"
-      android:layout_width="wrap_content"
+    <RelativeLayout
+      android:id="@+id/bottom_bar"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:paddingBottom="8dp"
-      android:paddingTop="8dp"
-      grid:alignmentMode="alignBounds"
-      grid:columnCount="7"
-      grid:rowOrderPreserved="false"
-      grid:useDefaultMargins="true"
       >
 
-      <TextView
-        android:id="@+id/monday"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="@dimen/course_item_days_of_week_padding"
-        android:background="@drawable/background_widget_course_item_day_inactive"
-        android:gravity="center"
-        android:text="M"
-        />
+      <ca.uoguelph.socs.uog_mobile.ui.view.DayBubblesView
+        android:id="@+id/day_overview"
+        xmlns:grid="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/expand_card"
+        android:paddingBottom="8dp"
+        grid:alignmentMode="alignBounds"
+        grid:columnCount="7"
+        grid:rowOrderPreserved="false"
+        grid:useDefaultMargins="true"
+        tools:visibility="gone" />
 
-      <TextView
-        android:id="@+id/tuesday"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="@dimen/course_item_days_of_week_padding"
-        android:layout_marginStart="@dimen/course_item_days_of_week_padding"
-        android:background="@drawable/background_widget_course_item_day_inactive"
-        android:gravity="center"
-        android:text="T"
-        />
+      <LinearLayout
+        android:id="@+id/expanded_info_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/expand_card"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
 
-      <TextView
-        android:id="@+id/wednesday"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="@dimen/course_item_days_of_week_padding"
-        android:layout_marginStart="@dimen/course_item_days_of_week_padding"
-        android:background="@drawable/background_widget_course_item_day_inactive"
-        android:gravity="center"
-        android:text="W"
-        />
+        <ca.uoguelph.socs.uog_mobile.ui.view.TimeslotInfoView
+          android:id="@+id/lecture"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:orientation="vertical"
+          custom:type="Lecture"
+          />
 
-      <TextView
-        android:id="@+id/thursday"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="@dimen/course_item_days_of_week_padding"
-        android:layout_marginStart="@dimen/course_item_days_of_week_padding"
-        android:background="@drawable/background_widget_course_item_day_inactive"
-        android:gravity="center"
-        android:text="T"
-        />
+        <ca.uoguelph.socs.uog_mobile.ui.view.TimeslotInfoView
+          android:id="@+id/lab"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:orientation="vertical"
+          custom:type="Lab"
+          />
 
-      <TextView
-        android:id="@+id/friday"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginEnd="@dimen/course_item_days_of_week_padding"
-        android:layout_marginStart="@dimen/course_item_days_of_week_padding"
-        android:background="@drawable/background_widget_course_item_day_inactive"
-        android:gravity="center"
-        android:text="F"
-        />
+        <ca.uoguelph.socs.uog_mobile.ui.view.TimeslotInfoView
+          android:id="@+id/exam"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:orientation="vertical"
+          custom:type="Exam"
+          />
+      </LinearLayout>
 
-      <TextView
-        android:id="@+id/saturday"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="@dimen/course_item_days_of_week_padding"
-        android:background="@drawable/background_widget_course_item_day_inactive"
-        android:gravity="center"
-        android:text="S"
-        />
-
-    </android.support.v7.widget.GridLayout>
+      <ImageButton
+        android:id="@+id/expand_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/expanded_info_container"
+        android:layout_alignParentEnd="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_marginBottom="8dp"
+        android:background="?android:selectableItemBackground"
+        android:padding="8dp"
+        android:src="@drawable/ic_keyboard_arrow_down_black_18dp"
+        tools:src="@drawable/ic_keyboard_arrow_up_black_18dp" />
+    </RelativeLayout>
   </LinearLayout>
 
 </android.support.v7.widget.CardView>

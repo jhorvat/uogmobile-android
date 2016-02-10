@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  >
+
+  <TextView
+    android:id="@+id/monday"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:layout_marginEnd="@dimen/course_item_days_of_week_padding"
+    android:background="@drawable/background_widget_course_item_day_inactive"
+    android:gravity="center"
+    android:text="M"
+    android:textStyle="bold" />
+
+  <TextView
+    android:id="@+id/tuesday"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:layout_marginEnd="@dimen/course_item_days_of_week_padding"
+    android:layout_marginStart="@dimen/course_item_days_of_week_padding"
+    android:background="@drawable/background_widget_course_item_day_inactive"
+    android:gravity="center"
+    android:text="T"
+    android:textStyle="bold"
+    />
+
+  <TextView
+    android:id="@+id/wednesday"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:layout_marginEnd="@dimen/course_item_days_of_week_padding"
+    android:layout_marginStart="@dimen/course_item_days_of_week_padding"
+    android:background="@drawable/background_widget_course_item_day_inactive"
+    android:gravity="center"
+    android:text="W"
+    android:textStyle="bold"
+    />
+
+  <TextView
+    android:id="@+id/thursday"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:layout_marginEnd="@dimen/course_item_days_of_week_padding"
+    android:layout_marginStart="@dimen/course_item_days_of_week_padding"
+    android:background="@drawable/background_widget_course_item_day_inactive"
+    android:gravity="center"
+    android:text="T"
+    android:textStyle="bold"
+    />
+
+  <TextView
+    android:id="@+id/friday"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:layout_marginEnd="@dimen/course_item_days_of_week_padding"
+    android:layout_marginStart="@dimen/course_item_days_of_week_padding"
+    android:background="@drawable/background_widget_course_item_day_inactive"
+    android:gravity="center"
+    android:text="F"
+    android:textStyle="bold"
+    />
+
+  <TextView
+    android:id="@+id/saturday"
+    android:layout_width="35dp"
+    android:layout_height="35dp"
+    android:layout_marginStart="@dimen/course_item_days_of_week_padding"
+    android:background="@drawable/background_widget_course_item_day_inactive"
+    android:gravity="center"
+    android:text="S"
+    android:textStyle="bold"
+    />
+
+</merge>

@@ -54,6 +54,8 @@ dependencies {
   compile "io.reactivex:rxandroid:$RX_VERSION"
   compile "io.reactivex:rxjava:$RX_VERSION"
 
+  compile 'com.squareup.phrase:phrase:1.1.0'
+
   compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
   compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
   compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:grid="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  >
+
+  <TextView
+    android:id="@+id/type"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textStyle="bold"
+
+    tools:text="Lecture" />
+
+  <TextView
+    android:id="@+id/location"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:text="MACN, Room 113" />
+
+  <TextView
+    android:id="@+id/time"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:text="07:00PM - 08:50PM"
+    />
+
+  <ca.uoguelph.socs.uog_mobile.ui.view.DayBubblesView
+    android:id="@+id/days"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp"
+    grid:alignmentMode="alignBounds"
+    grid:columnCount="7"
+    grid:rowOrderPreserved="false"
+    grid:useDefaultMargins="true" />
+</merge>

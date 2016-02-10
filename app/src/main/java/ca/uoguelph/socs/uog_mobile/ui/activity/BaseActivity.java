@@ -26,12 +26,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         supportFragmentManager = this.getSupportFragmentManager();
     }
 
-    protected void addFragment(int containerViewId, String tag, Fragment fragment) {
-        supportFragmentManager.beginTransaction().add(containerViewId, fragment, tag).commit();
-    }
+    protected void replaceFragment(int containerViewId, String tag, Fragment fragment,
+          boolean addToBackStack) {
 
-    protected void replaceFragment(int containerViewId, String tag, Fragment fragment) {
-        supportFragmentManager.beginTransaction().replace(containerViewId, fragment, tag).commit();
+        if (addToBackStack) {
+            supportFragmentManager.beginTransaction()
+                                  .replace(containerViewId, fragment, tag)
+                                  .addToBackStack(null)
+                                  .commit();
+        } else {
+            supportFragmentManager.beginTransaction()
+                                  .replace(containerViewId, fragment, tag)
+                                  .commit();
+        }
     }
 
     protected ApplicationComponent getApplicationComponent() {
