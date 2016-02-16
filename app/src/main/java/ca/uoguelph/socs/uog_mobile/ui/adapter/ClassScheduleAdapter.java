@@ -1,5 +1,10 @@
 package ca.uoguelph.socs.uog_mobile.ui.adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -7,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -99,12 +106,15 @@ import javax.inject.Inject;
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            expandCard.setOnClickListener(view -> {
-                final boolean collapsed = expandedContainer.getVisibility() == View.GONE;
+            final Interpolator interpolator = AnimationUtils.loadInterpolator(itemView.getContext(),
+                                                                              android.R.interpolator.decelerate_cubic);
 
-                expandedContainer.setVisibility(collapsed ? View.VISIBLE : View.GONE);
-                dayBubbles.setVisibility(collapsed ? View.GONE : View.VISIBLE);
-                expandCard.setImageDrawable(collapsed ? arrowUp : arrowDown);
+            expandCard.setOnClickListener(view -> {
+                AnimatorSet animation =
+                      expandedContainer.getVisibility() == View.GONE ? expand() : collapse();
+
+                animation.setDuration(350).setInterpolator(interpolator);
+                animation.start();
             });
         }
 
@@ -135,6 +145,62 @@ import javax.inject.Inject;
             } else {
                 bottomBar.setVisibility(View.GONE);
             }
+        }
+
+        private AnimatorSet expand() {
+            expandedContainer.setVisibility(View.VISIBLE);
+            dayBubbles.setAlpha(0);
+            dayBubbles.setVisibility(View.INVISIBLE);
+
+            final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            final int heightSpec =
+                  View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+
+            expandedContainer.measure(widthSpec, heightSpec);
+
+            AnimatorSet set = new AnimatorSet();
+            set.play(getHeightAnimator(dayBubbles.getMeasuredHeight(),
+                                       expandedContainer.getMeasuredHeight()))
+               .with(ObjectAnimator.ofFloat(expandCard, "rotation", 0f, 180f));
+
+            return set;
+        }
+
+        private AnimatorSet collapse() {
+            final ObjectAnimator bubbleAlpha = ObjectAnimator.ofFloat(dayBubbles, "alpha", 1);
+            bubbleAlpha.setStartDelay(250);
+
+            AnimatorSet set = new AnimatorSet();
+            set.play(getHeightAnimator(expandedContainer.getHeight(),
+                                       dayBubbles.getMeasuredHeight()))
+               .with(ObjectAnimator.ofFloat(expandCard, "rotation", 180f, 0f))
+               .with(bubbleAlpha);
+
+            return set;
+        }
+
+        private ValueAnimator getHeightAnimator(int start, int end) {
+            ValueAnimator animator = ValueAnimator.ofInt(start, end);
+
+            animator.addUpdateListener(animation -> {
+                ViewGroup.LayoutParams layoutParams = expandedContainer.getLayoutParams();
+                layoutParams.height = (Integer) animation.getAnimatedValue();
+                expandedContainer.setLayoutParams(layoutParams);
+            });
+
+            if (start > end) {
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override public void onAnimationStart(Animator animation) {
+                        dayBubbles.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override public void onAnimationEnd(Animator animation) {
+                        expandedContainer.setVisibility(View.GONE);
+                    }
+                });
+            }
+
+            return animator;
         }
     }
 }

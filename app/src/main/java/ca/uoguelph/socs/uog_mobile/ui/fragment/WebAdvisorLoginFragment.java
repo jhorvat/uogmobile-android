@@ -49,7 +49,7 @@ public class WebAdvisorLoginFragment extends BaseFragment {
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cookieManager.setAcceptThirdPartyCookies(webView, true);
             cookieManager.removeAllCookies(value -> loadLogin());
         } else {
