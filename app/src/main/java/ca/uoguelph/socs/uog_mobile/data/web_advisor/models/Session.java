@@ -1,33 +1,27 @@
 package ca.uoguelph.socs.uog_mobile.data.web_advisor.models;
 
-import auto.parcelgson.AutoParcelGson;
-import auto.parcelgson.gson.annotations.SerializedName;
+import android.os.Parcelable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by julianhorvat on 2016-01-25.
  */
-@AutoParcelGson public abstract class Session {
+@AutoValue public abstract class Session implements Parcelable {
+    abstract String cookie();
+
+    @SerializedName("test_session") abstract boolean testSession();
+
     public static Session create(String c, boolean test) {
-        return builder().cookie(c).testSession(test).build();
+        return new AutoValue_Session(c, test);
     }
 
     public static Session create(String c) {
         return create(c, false);
     }
 
-    public static Builder builder() {
-        return new AutoParcelGson_Session.Builder();
-    }
-
-    abstract String cookie();
-
-    @SerializedName("test_session") abstract boolean testSession();
-
-    @AutoParcelGson.Builder public interface Builder {
-        Builder testSession(boolean test);
-
-        Builder cookie(String v);
-
-        Session build();
+    public static TypeAdapterFactory typeAdapterFactory() {
+        return AutoValue_Session.typeAdapterFactory();
     }
 }

@@ -4,11 +4,15 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.webkit.CookieManager;
-import auto.parcelgson.gson.AutoParcelGsonTypeAdapterFactory;
 import ca.uoguelph.socs.uog_mobile.UoGMobileApplication;
 import ca.uoguelph.socs.uog_mobile.data.net.LoggingInterceptor;
 import ca.uoguelph.socs.uog_mobile.data.net.OkCookieManager;
+import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Course;
+import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Schedule;
+import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Session;
+import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Timeslot;
 import ca.uoguelph.socs.uog_mobile.util.RxEventBus;
+import com.cesarferreira.rxpaper.RxPaper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dagger.Module;
@@ -60,7 +64,10 @@ import retrofit2.RxJavaCallAdapterFactory;
     }
 
     @Provides @Singleton Gson provideGson() {
-        return new GsonBuilder().registerTypeAdapterFactory(new AutoParcelGsonTypeAdapterFactory())
+        return new GsonBuilder().registerTypeAdapterFactory(Course.typeAdapterFactory())
+                                .registerTypeAdapterFactory(Schedule.typeAdapterFactory())
+                                .registerTypeAdapterFactory(Session.typeAdapterFactory())
+                                .registerTypeAdapterFactory(Timeslot.typeAdapterFactory())
                                 .create();
     }
 
@@ -77,5 +84,9 @@ import retrofit2.RxJavaCallAdapterFactory;
         return new Retrofit.Builder().addConverterFactory(converter)
                                      .addCallAdapterFactory(callAdapter)
                                      .client(client);
+    }
+
+    @Provides @Singleton RxPaper providePaper(Application app) {
+        return RxPaper.with(app);
     }
 }

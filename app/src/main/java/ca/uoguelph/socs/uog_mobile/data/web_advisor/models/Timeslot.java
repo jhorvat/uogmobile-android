@@ -1,6 +1,8 @@
 package ca.uoguelph.socs.uog_mobile.data.web_advisor.models;
 
-import auto.parcelgson.AutoParcelGson;
+import android.os.Parcelable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.TypeAdapterFactory;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by julianhorvat on 2016-01-26.
  */
-@AutoParcelGson public abstract class Timeslot {
+@AutoValue public abstract class Timeslot implements Parcelable {
 
     // WebAdvisor currently has no sunday dates so one here is unnecessary
     public enum DaysOfWeek {
@@ -27,24 +29,10 @@ import org.jetbrains.annotations.NotNull;
     @NotNull public abstract ArrayList<DaysOfWeek> days();
 
     public static Timeslot create(String location, String time, ArrayList<DaysOfWeek> days) {
-        return builder().location(location).time(time).days(days).build();
+        return new AutoValue_Timeslot(location, time, days);
     }
 
-    public static Builder builder() {
-        return new AutoParcelGson_Timeslot.Builder();
-    }
-
-    @AutoParcelGson.Builder public interface Builder {
-        Builder location(String l);
-
-        Builder time(String t);
-
-        Builder days(ArrayList<DaysOfWeek> d);
-
-        Timeslot build();
+    public static TypeAdapterFactory typeAdapterFactory() {
+        return AutoValue_Timeslot.typeAdapterFactory();
     }
 }
-//public class Timeslot {
-//    String location, time;
-//    String[] days;
-//}

@@ -1,42 +1,23 @@
 package ca.uoguelph.socs.uog_mobile.data.web_advisor.models;
 
-import auto.parcelgson.AutoParcelGson;
+import android.os.Parcelable;
+import com.google.auto.value.AutoValue;
+import com.google.gson.TypeAdapterFactory;
 import java.util.ArrayList;
 
 /**
  * Created by julianhorvat on 2016-01-26.
  */
-@AutoParcelGson public abstract class Schedule {
-    public static Schedule create(ArrayList<Course> courses, String term) {
-        return builder().courses(courses).term(term).build();
-    }
-
-    public static Builder builder() {
-        return new AutoParcelGson_Schedule.Builder();
-    }
-
+@AutoValue public abstract class Schedule implements Parcelable {
     public abstract ArrayList<Course> courses();
 
     public abstract String term();
 
-    @AutoParcelGson.Builder public interface Builder {
-        Builder courses(ArrayList<Course> c);
+    public static Schedule create(ArrayList<Course> courses, String term) {
+        return new AutoValue_Schedule(courses, term);
+    }
 
-        Builder term(String t);
-
-        Schedule build();
+    public static TypeAdapterFactory typeAdapterFactory() {
+        return AutoValue_Schedule.typeAdapterFactory();
     }
 }
-
-//public class Schedule {
-//    Course[] courses;
-//    String term;
-//
-//    @Override public String toString() {
-//        StringBuilder builder = new StringBuilder();
-//        for (Course c : courses) {
-//            builder.append(c.name).append(", ");
-//        }
-//        return builder.toString();
-//    }
-//}

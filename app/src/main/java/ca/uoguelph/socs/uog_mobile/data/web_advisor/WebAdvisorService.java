@@ -6,6 +6,7 @@ import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Session;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.User;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
 import ca.uoguelph.socs.uog_mobile.util.RxUtils;
+import com.cesarferreira.rxpaper.RxPaper;
 import javax.inject.Inject;
 import retrofit2.Retrofit;
 import retrofit2.http.Body;
@@ -20,10 +21,12 @@ import timber.log.Timber;
 @PerActivity public class WebAdvisorService {
     private final Api service;
     private final String baseUrl;
+    private final RxPaper paper;
 
-    @Inject public WebAdvisorService(Retrofit retrofit) {
+    @Inject public WebAdvisorService(Retrofit retrofit, RxPaper paper) {
         this.service = retrofit.create(Api.class);
         this.baseUrl = retrofit.baseUrl().url().toString();
+        this.paper = paper;
     }
 
     public Observable<User> login(String cookies) {

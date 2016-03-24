@@ -1,13 +1,15 @@
 package ca.uoguelph.socs.uog_mobile.data.web_advisor.models;
 
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import auto.parcelgson.AutoParcelGson;
-import auto.parcelgson.gson.annotations.SerializedName;
+import com.google.auto.value.AutoValue;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by julianhorvat on 2016-01-26.
  */
-@AutoParcelGson public abstract class Course {
+@AutoValue public abstract class Course implements Parcelable {
     @SerializedName("name") protected abstract String fullName();
 
     public abstract boolean de();
@@ -22,11 +24,11 @@ import auto.parcelgson.gson.annotations.SerializedName;
 
     public static Course create(String fullName, boolean de, Timeslot lecture, Timeslot lab,
           Timeslot exam) {
-        return builder().fullName(fullName).de(de).lecture(lecture).lab(lab).exam(exam).build();
+        return new AutoValue_Course(fullName, de, lecture, lab, exam);
     }
 
-    public static Builder builder() {
-        return new AutoParcelGson_Course.Builder();
+    public static TypeAdapterFactory typeAdapterFactory() {
+        return AutoValue_Course.typeAdapterFactory();
     }
 
     public String name() {
@@ -51,19 +53,5 @@ import auto.parcelgson.gson.annotations.SerializedName;
             name = nameParts[1];
             code = nameParts[0];
         }
-    }
-
-    @AutoParcelGson.Builder public interface Builder {
-        Builder fullName(String n);
-
-        Builder de(boolean d);
-
-        Builder lab(Timeslot t);
-
-        Builder exam(Timeslot t);
-
-        Builder lecture(Timeslot t);
-
-        Course build();
     }
 }

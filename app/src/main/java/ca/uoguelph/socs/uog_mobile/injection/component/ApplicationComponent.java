@@ -6,6 +6,7 @@ import android.webkit.CookieManager;
 import ca.uoguelph.socs.uog_mobile.injection.module.ApplicationModule;
 import ca.uoguelph.socs.uog_mobile.ui.activity.BaseActivity;
 import ca.uoguelph.socs.uog_mobile.util.RxEventBus;
+import com.cesarferreira.rxpaper.RxPaper;
 import dagger.Component;
 import javax.inject.Singleton;
 import retrofit2.Retrofit;
@@ -25,4 +26,6 @@ import retrofit2.Retrofit;
     SharedPreferences prefs();
 
     RxEventBus bus();
+
+    RxPaper db();
 }
