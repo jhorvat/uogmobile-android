@@ -107,7 +107,7 @@
         android:background="?android:selectableItemBackground"
         android:padding="8dp"
         android:src="@drawable/ic_keyboard_arrow_down_black_18dp"
-        tools:src="@drawable/ic_keyboard_arrow_up_black_18dp" />
+        tools:src="@drawable/ic_keyboard_arrow_down_black_18dp" />
     </RelativeLayout>
   </LinearLayout>
 

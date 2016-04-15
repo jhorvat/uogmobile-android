@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ca.uoguelph.socs.uog_mobile">
+<manifest
+  package="ca.uoguelph.socs.uog_mobile"
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
   <uses-permission android:name="android.permission.INTERNET" />
 
   <application
-      android:allowBackup="true"
-      android:name=".UoGMobileApplication"
-      android:icon="@mipmap/ic_launcher"
-      android:label="@string/app_name"
-      android:supportsRtl="true"
-      android:theme="@style/AppTheme"
-      >
+    android:name=".UoGMobileApplication"
+    android:allowBackup="true"
+    android:hardwareAccelerated="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme"
+    >
     <activity
-        android:name=".ui.activity.WebAdvisorActivity"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme.NoActionBar"
-        >
+      android:name=".ui.activity.DispatchActivity"
+      android:label="@string/app_name"
+      android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
+        <action android:name="android.intent.action.MAIN" />
 
-        <category android:name="android.intent.category.LAUNCHER"/>
+        <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
     </activity>
+
+    <activity
+      android:name=".ui.activity.WebAdvisorActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+
+    <activity
+      android:name=".ui.activity.CentralLookupActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
   </application>
 
 </manifest>

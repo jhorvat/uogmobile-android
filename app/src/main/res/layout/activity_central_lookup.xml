@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/colorPrimary"
+  android:fitsSystemWindows="true"
+  >
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/activity_horizontal_margin">
+
+    <TextView
+      android:id="@+id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/central_input"
+      android:text="What's your UoGuelph email?"
+      android:textColor="@android:color/white"
+      android:textSize="34sp"
+      android:textStyle="bold" />
+
+    <EditText
+      android:id="@+id/central_input"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:layout_marginTop="16dp"
+      android:background="@drawable/background_central_verify_input"
+      android:gravity="right"
+      android:lines="1"
+      android:padding="8dp"
+      android:paddingEnd="16dp"
+      android:paddingStart="16dp"
+      android:singleLine="true"
+      android:text="example\@mail.uoguelph.ca"
+      android:textAlignment="center"
+      android:textColor="@android:color/white"
+      android:textSize="20sp"
+      tools:text="horvat\@mail.uoguelph.ca"
+      />
+
+    <Button
+      android:id="@+id/submit_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/central_input"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="48dp"
+      android:background="@drawable/backgroud_central_verify_btn"
+      android:drawableEnd="@drawable/ic_arrow_forward_white_24dp"
+      android:drawablePadding="4dp"
+      android:padding="8dp"
+      android:paddingEnd="16dp"
+      android:paddingStart="16dp"
+      android:text="Verify ID"
+      android:textColor="@android:color/white"
+      android:textSize="16sp"
+      />
+
+    <ProgressBar
+      android:id="@+id/loading_indicator"
+      style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Small"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/submit_button"
+      android:layout_centerHorizontal="true"
+      android:layout_margin="16dp"
+      android:visibility="gone"
+      />
+
+  </RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

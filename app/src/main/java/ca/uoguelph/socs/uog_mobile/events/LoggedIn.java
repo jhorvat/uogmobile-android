@@ -1,6 +1,6 @@
 package ca.uoguelph.socs.uog_mobile.events;
 
-import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.User;
+import ca.uoguelph.socs.uog_mobile.data.central_lookup.models.User;
 
 /**
  * Created by julianhorvat on 2016-02-02.

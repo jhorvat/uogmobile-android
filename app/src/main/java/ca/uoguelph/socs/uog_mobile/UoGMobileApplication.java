@@ -4,6 +4,7 @@ import android.app.Application;
 import ca.uoguelph.socs.uog_mobile.injection.component.ApplicationComponent;
 import ca.uoguelph.socs.uog_mobile.injection.component.DaggerApplicationComponent;
 import ca.uoguelph.socs.uog_mobile.injection.module.ApplicationModule;
+import io.paperdb.Paper;
 import timber.log.Timber;
 
 /**
@@ -18,6 +19,8 @@ public class UoGMobileApplication extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+
+        Paper.init(this);
 
         component = DaggerApplicationComponent.builder()
                                               .applicationModule(new ApplicationModule(this))

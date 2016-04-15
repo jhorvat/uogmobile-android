@@ -99,9 +99,6 @@ import javax.inject.Inject;
         @Bind(R.id.day_overview) DayBubblesView dayBubbles;
         @Bind(R.id.expand_card) ImageButton expandCard;
 
-        @BindDrawable(R.drawable.ic_keyboard_arrow_down_black_18dp) Drawable arrowDown;
-        @BindDrawable(R.drawable.ic_keyboard_arrow_up_black_18dp) Drawable arrowUp;
-
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

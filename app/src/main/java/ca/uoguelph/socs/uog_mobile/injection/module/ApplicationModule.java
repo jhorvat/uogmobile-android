@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.webkit.CookieManager;
 import ca.uoguelph.socs.uog_mobile.UoGMobileApplication;
+import ca.uoguelph.socs.uog_mobile.data.central_lookup.models.User;
 import ca.uoguelph.socs.uog_mobile.data.net.LoggingInterceptor;
 import ca.uoguelph.socs.uog_mobile.data.net.OkCookieManager;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Course;
@@ -12,7 +13,6 @@ import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Schedule;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Session;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Timeslot;
 import ca.uoguelph.socs.uog_mobile.util.RxEventBus;
-import com.cesarferreira.rxpaper.RxPaper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dagger.Module;
@@ -68,6 +68,7 @@ import retrofit2.RxJavaCallAdapterFactory;
                                 .registerTypeAdapterFactory(Schedule.typeAdapterFactory())
                                 .registerTypeAdapterFactory(Session.typeAdapterFactory())
                                 .registerTypeAdapterFactory(Timeslot.typeAdapterFactory())
+                                .registerTypeAdapterFactory(User.typeAdapterFactory())
                                 .create();
     }
 
@@ -84,9 +85,5 @@ import retrofit2.RxJavaCallAdapterFactory;
         return new Retrofit.Builder().addConverterFactory(converter)
                                      .addCallAdapterFactory(callAdapter)
                                      .client(client);
-    }
-
-    @Provides @Singleton RxPaper providePaper(Application app) {
-        return RxPaper.with(app);
     }
 }

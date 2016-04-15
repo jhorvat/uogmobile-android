@@ -9,17 +9,21 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import ca.uoguelph.socs.uog_mobile.R;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.WebAdvisorService;
+import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Schedule;
 import ca.uoguelph.socs.uog_mobile.events.ShowCourseDetails;
 import ca.uoguelph.socs.uog_mobile.injection.component.WebAdvisorComponent;
 import ca.uoguelph.socs.uog_mobile.ui.adapter.ClassScheduleAdapter;
 import ca.uoguelph.socs.uog_mobile.util.RxEventBus;
 import javax.inject.Inject;
+import rx.Observable;
 import timber.log.Timber;
 
 /**
  * Created by julianhorvat on 2016-02-02.
  */
 public class WebAdvisorScheduleFragment extends BaseFragment {
+    public static final String STATE_SCHEDULE = "Schedule";
+
     @Inject ClassScheduleAdapter scheduleAdapter;
     @Inject RecyclerView.LayoutManager layoutManager;
     @Inject WebAdvisorService webAdvisorService;
@@ -27,9 +31,14 @@ public class WebAdvisorScheduleFragment extends BaseFragment {
 
     @Bind(R.id.class_list) RecyclerView recyclerView;
 
+    private Schedule schedule;
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.getComponent(WebAdvisorComponent.class).inject(this);
+
+        if (savedInstanceState != null) {
+            schedule = savedInstanceState.getParcelable(STATE_SCHEDULE);
+        }
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,6 +50,7 @@ public class WebAdvisorScheduleFragment extends BaseFragment {
 
     @Override public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        this.getComponent(WebAdvisorComponent.class).inject(this);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(scheduleAdapter);
@@ -51,8 +61,17 @@ public class WebAdvisorScheduleFragment extends BaseFragment {
 
     @Override public void onResume() {
         super.onResume();
-        webAdvisorService.getSchedule()
-                         .subscribe(schedule -> scheduleAdapter.setClassSchedule(schedule.courses()),
-                                    throwable -> Timber.e(throwable, "Something failed"));
+        Observable.just(schedule)
+                  .mergeWith(webAdvisorService.getSchedule())
+                  .filter(s -> s != null)
+                  .subscribe(s -> {
+                      schedule = s;
+                      scheduleAdapter.setClassSchedule(schedule.courses());
+                  }, throwable -> Timber.e(throwable, "Something failed"));
+    }
+
+    @Override public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(STATE_SCHEDULE, schedule);
     }
 }

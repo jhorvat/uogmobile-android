@@ -26,6 +26,4 @@ import retrofit2.Retrofit;
     SharedPreferences prefs();
 
     RxEventBus bus();
-
-    RxPaper db();
 }

@@ -13,10 +13,6 @@ import retrofit2.Retrofit;
  */
 @Module public class WebAdvisorModule {
 
-    @Provides String provideMockString() {
-        return "Injected!";
-    }
-
     @Provides @Named("BASE_URL") String provideBaseUrl() {
         return "http://131.104.49.59:5000/webadvisor/";
     }

@@ -29,10 +29,10 @@ android {
 }
 
 dependencies {
-  final SUPPORT_LIBRARY_VERSION = '23.+'
-  final DAGGER_VERSION = '2.+'
+  final SUPPORT_LIBRARY_VERSION = '23.2.1'
+  final DAGGER_VERSION = '2.0'
   final RETROFIT_VERSION = '2.0.0-beta3'
-  final RX_VERSION = '1.1.+'
+  final RX_VERSION = '1.1.0'
 
   compile fileTree(dir: 'libs', include: ['*.jar'])
 

@@ -3,6 +3,7 @@ package ca.uoguelph.socs.uog_mobile.injection.component;
 import android.content.Context;
 import ca.uoguelph.socs.uog_mobile.injection.module.ActivityModule;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
+import com.cesarferreira.rxpaper.RxPaper;
 import dagger.Component;
 
 /**

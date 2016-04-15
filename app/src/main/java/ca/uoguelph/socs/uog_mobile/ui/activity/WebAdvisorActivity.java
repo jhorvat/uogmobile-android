@@ -39,7 +39,11 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
 
         this.initializeInjection();
 
-        replaceFragment(R.id.frag_container, TAG_WA_LOGIN, new WebAdvisorLoginFragment(), false);
+        final WebAdvisorLoginFragment loginFragment = new WebAdvisorLoginFragment();
+        final Bundle loginArgs = new Bundle();
+        loginArgs.putParcelable("user", this.getIntent().getParcelableExtra("user"));
+        loginFragment.setArguments(loginArgs);
+        replaceFragment(R.id.frag_container, TAG_WA_LOGIN, loginFragment, false);
     }
 
     @Override protected void onResume() {

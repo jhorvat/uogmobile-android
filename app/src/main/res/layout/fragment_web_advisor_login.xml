@@ -1,14 +1,45 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.WebAdvisorLoginFragment"
-    >
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".ui.fragment.WebAdvisorLoginFragment"
+  >
 
   <WebView
-      android:id="@+id/webview"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
+    android:id="@+id/webview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    />
+
+  <RelativeLayout
+    android:id="@+id/loading_splash"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:visibility="gone"
+    tools:visibility="visible"
+    >
+
+    <ProgressBar
+      android:id="@+id/loading_indicator"
+      style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/submit_button"
+      android:layout_centerHorizontal="true"
+      android:layout_centerInParent="true"
+      android:layout_margin="16dp"
       />
 
+    <TextView
+      android:id="@+id/hero_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/loading_indicator"
+      android:layout_centerHorizontal="true"
+      android:textColor="@android:color/white"
+      android:textSize="34sp"
+      android:textStyle="bold"
+      tools:text="Welcome, Julian!" />
+  </RelativeLayout>
 </FrameLayout>
