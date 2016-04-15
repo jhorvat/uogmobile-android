@@ -3,7 +3,7 @@ package ca.uoguelph.socs.uog_mobile.injection.component;
 import android.content.Context;
 import ca.uoguelph.socs.uog_mobile.injection.module.ActivityModule;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
-import com.cesarferreira.rxpaper.RxPaper;
+import ca.uoguelph.socs.uog_mobile.ui.activity.DispatchActivity;
 import dagger.Component;
 
 /**
@@ -13,5 +13,7 @@ import dagger.Component;
 public interface ActivityComponent {
     //Exposed to sub-graphs.
     Context activity();
+
+    void inject(DispatchActivity activity);
 }
 

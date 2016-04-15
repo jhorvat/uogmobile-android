@@ -38,7 +38,7 @@ import timber.log.Timber;
 
     public void login(String cookie) {
         webAdvisorSub = service.login(cookie)
-                               .subscribe(user -> bus.post(new LoggedIn(user)),
+                               .subscribe(session -> bus.post(new LoggedIn(session)),
                                           e -> Timber.d(e, "Something failed"),
                                           () -> webAdvisorSub = RxUtils.resetSub(webAdvisorSub));
     }

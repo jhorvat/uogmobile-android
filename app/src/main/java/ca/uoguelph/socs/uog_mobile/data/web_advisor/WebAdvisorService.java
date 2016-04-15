@@ -1,9 +1,7 @@
 package ca.uoguelph.socs.uog_mobile.data.web_advisor;
 
-import android.webkit.CookieManager;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Schedule;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Session;
-import ca.uoguelph.socs.uog_mobile.data.central_lookup.models.User;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
 import ca.uoguelph.socs.uog_mobile.util.RxUtils;
 import javax.inject.Inject;
@@ -12,7 +10,6 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import rx.Observable;
-import timber.log.Timber;
 
 /**
  * Created by julianhorvat on 2016-01-25.
@@ -26,11 +23,8 @@ import timber.log.Timber;
         this.baseUrl = retrofit.baseUrl().url().toString();
     }
 
-    public Observable<User> login(String cookies) {
-        return this.service.login(Session.create(cookies)).doOnNext(user -> {
-            CookieManager c = CookieManager.getInstance();
-            Timber.d("Session session %s", c.getCookie(this.baseUrl));
-        }).compose(RxUtils.applySchedulers());
+    public Observable<Session> login(String cookies) {
+        return this.service.login(Session.create(cookies)).compose(RxUtils.applySchedulers());
     }
 
     public Observable<Schedule> getSchedule() {
@@ -38,7 +32,7 @@ import timber.log.Timber;
     }
 
     private interface Api {
-        @POST("login") Observable<User> login(@Body Session c);
+        @POST("login") Observable<Session> login(@Body Session c);
 
         @GET("schedule") Observable<Schedule> schedule();
     }

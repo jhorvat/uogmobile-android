@@ -58,14 +58,12 @@ dependencies {
   compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
   compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
 
-  compile 'io.paperdb:paperdb:1.1'
-  compile 'com.cesarferreira.rxpaper:rxpaper:0.3.3'
-
   compile 'com.google.code.gson:gson:2.6.2'
   provided 'com.google.auto.value:auto-value:1.2-rc1'
   apt 'com.google.auto.value:auto-value:1.2-rc1'
   apt 'com.ryanharter.auto.value:auto-value-parcel:0.2.0'
   apt 'com.ryanharter.auto.value:auto-value-gson:0.2.1'
+  compile 'com.ryanharter.auto.value:auto-value-parcel-adapter:0.2.1'
 
   testCompile 'junit:junit:4.12'
   compile 'org.jetbrains:annotations:13.0'

@@ -1,6 +1,7 @@
 package ca.uoguelph.socs.uog_mobile.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,7 +17,7 @@ import ca.uoguelph.socs.uog_mobile.injection.component.CentralLookupComponent;
 import ca.uoguelph.socs.uog_mobile.injection.component.DaggerCentralLookupComponent;
 import ca.uoguelph.socs.uog_mobile.injection.module.CentralLookupModule;
 import ca.uoguelph.socs.uog_mobile.util.RxUtils;
-import io.paperdb.Paper;
+import com.google.gson.Gson;
 import javax.inject.Inject;
 import rx.Subscription;
 import timber.log.Timber;
@@ -25,8 +26,6 @@ import timber.log.Timber;
  * Created by julianhorvat on 2016-03-30.
  */
 public class CentralLookupActivity extends BaseActivity {
-
-    public static final String CENTRAL_USER_KEY = "CENTRAL_USER_KEY";
 
     private Subscription lookupSub;
 
@@ -55,11 +54,9 @@ public class CentralLookupActivity extends BaseActivity {
                                          .doOnSubscribe(() -> loading.setVisibility(View.VISIBLE))
                                          .subscribe(user -> {
                                              Timber.d("Found user %s", user.toString());
-                                             Paper.book().write(CENTRAL_USER_KEY, user);
 
                                              Intent in = new Intent(this, WebAdvisorActivity.class);
                                              in.putExtra("user", user);
-                                             in.putExtra("first_launch", true);
                                              startActivity(in);
                                          }, error -> Timber.e(error.getMessage()));
             }

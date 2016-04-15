@@ -110,15 +110,15 @@ public class WebAdvisorLoginFragment extends BaseFragment {
             @Override public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
-                if (loadingSplash.isShown()) {
-                    loadingSplash.setVisibility(View.GONE);
-                }
-
                 if (url.startsWith(LOGGED_IN_URL_PREFIX) && !loggedIn) {
                     loggedIn = true;
                     String cookie = cookieManager.getCookie(url);
                     Timber.d("Page loaded, %s \n Cookies: %s", url, cookie);
                     presenter.login(cookie);
+                } else if (url.equals(LOGIN_URL)) {
+                    if (loadingSplash.isShown()) {
+                        loadingSplash.setVisibility(View.GONE);
+                    }
                 }
             }
         });

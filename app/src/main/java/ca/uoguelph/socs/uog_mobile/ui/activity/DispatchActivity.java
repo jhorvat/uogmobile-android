@@ -1,10 +1,14 @@
 package ca.uoguelph.socs.uog_mobile.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import com.cesarferreira.rxpaper.RxPaper;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import android.text.TextUtils;
+import ca.uoguelph.socs.uog_mobile.data.central_lookup.models.User;
+import ca.uoguelph.socs.uog_mobile.injection.component.ActivityComponent;
+import ca.uoguelph.socs.uog_mobile.injection.component.DaggerActivityComponent;
+import com.google.gson.Gson;
+import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
@@ -12,30 +16,34 @@ import timber.log.Timber;
  */
 public class DispatchActivity extends BaseActivity {
 
+    @Inject Gson gson;
+    @Inject SharedPreferences prefs;
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.d("In Dispatch, launching new activity");
+        this.initializeInjection();
 
-        final RxPaper paper = RxPaper.with(this);
+        final String user = prefs.getString("user", "");
+        final Class toLaunch =
+              TextUtils.isEmpty(user) ? CentralLookupActivity.class : WebAdvisorActivity.class;
+        final Intent in = new Intent(this, toLaunch);
 
-        paper.exists(CentralLookupActivity.CENTRAL_USER_KEY)
-              //.flatMap(exists -> exists ? paper.read(CentralLookupActivity.CENTRAL_USER_KEY)
-              //      : Observable.just((User) null))
-              .subscribeOn(Schedulers.io())
-              .observeOn(AndroidSchedulers.mainThread())
-              .subscribe(user -> {
-                  final Class toLaunch =
-                        user ? CentralLookupActivity.class : WebAdvisorActivity.class;
-                  final Intent in = new Intent(this, toLaunch);
+        if (toLaunch == WebAdvisorActivity.class) {
+            Timber.d("User has been verified");
+            in.putExtra("user", gson.fromJson(user, User.class));
+        } else {
+            Timber.d("New user, verifying identity");
+        }
 
-                  if (toLaunch == WebAdvisorActivity.class) {
-                      Timber.d("User has been verified");
-                      in.putExtra("user", user);
-                  } else {
-                      Timber.d("New user, verifying identity");
-                  }
+        startActivity(in);
+    }
 
-                  startActivity(in);
-              });
+    private void initializeInjection() {
+        ActivityComponent component = DaggerActivityComponent.builder()
+                                                             .applicationComponent(
+                                                                   getApplicationComponent())
+                                                             .activityModule(getActivityModule())
+                                                             .build();
+        component.inject(this);
     }
 }

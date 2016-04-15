@@ -1,10 +1,8 @@
 package ca.uoguelph.socs.uog_mobile.injection.module;
 
-import android.app.Application;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
-import com.cesarferreira.rxpaper.RxPaper;
 import dagger.Module;
 import dagger.Provides;
 
