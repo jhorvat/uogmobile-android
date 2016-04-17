@@ -1,15 +1,17 @@
 package ca.uoguelph.socs.uog_mobile.ui.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.ViewGroup;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import ca.uoguelph.socs.uog_mobile.R;
+import ca.uoguelph.socs.uog_mobile.data.web_advisor.WebAdvisorService;
 import ca.uoguelph.socs.uog_mobile.events.LoggedIn;
-import ca.uoguelph.socs.uog_mobile.events.ShowCourseDetails;
 import ca.uoguelph.socs.uog_mobile.injection.HasComponent;
 import ca.uoguelph.socs.uog_mobile.injection.component.DaggerWebAdvisorComponent;
 import ca.uoguelph.socs.uog_mobile.injection.component.WebAdvisorComponent;
@@ -17,14 +19,13 @@ import ca.uoguelph.socs.uog_mobile.injection.module.WebAdvisorModule;
 import ca.uoguelph.socs.uog_mobile.ui.fragment.WebAdvisorLoginFragment;
 import ca.uoguelph.socs.uog_mobile.ui.fragment.WebAdvisorScheduleFragment;
 import ca.uoguelph.socs.uog_mobile.util.RxUtils;
+import javax.inject.Inject;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 public class WebAdvisorActivity extends BaseActivity implements HasComponent {
 
-    private static final String TAG_WA_LOGIN = "WALoginFrag";
-    private static final String TAG_WA_SCHEDULE = "WAScheduleFrag";
+    @Inject SharedPreferences prefs;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.frag_container) ViewGroup fragContainer;
@@ -48,10 +49,11 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
               : getIntent().getParcelableExtra("user");
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                                  .add(R.id.frag_container,
-                                       WebAdvisorLoginFragment.newInstance(user))
-                                  .commit();
+            Fragment frag = prefs.contains(WebAdvisorService.SCHEDULE_KEY)
+                  ? WebAdvisorScheduleFragment.newInstance()
+                  : WebAdvisorLoginFragment.newInstance(user);
+
+            supportFragmentManager.beginTransaction().add(R.id.frag_container, frag).commit();
         }
     }
 
@@ -59,7 +61,6 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
         super.onResume();
         eventSub = new CompositeSubscription();
         eventSub.add(loggedInSub());
-        eventSub.add(courseClickedSub());
     }
 
     @Override protected void onPause() {
@@ -76,12 +77,6 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
         return this.webAdvisorComponent;
     }
 
-    private Subscription courseClickedSub() {
-        return bus.observeEvent(ShowCourseDetails.class).subscribe(event -> {
-            Timber.d("%s clicked", event.getCourse().name());
-        });
-    }
-
     private Subscription loggedInSub() {
         return bus.observeEvent(LoggedIn.class).subscribe(loggedIn -> {
             supportFragmentManager.beginTransaction()
@@ -93,11 +88,11 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
     }
 
     private void initializeInjection() {
-        this.webAdvisorComponent = DaggerWebAdvisorComponent.builder()
-                                                            .applicationComponent(
-                                                                  getApplicationComponent())
-                                                            .activityModule(getActivityModule())
-                                                            .webAdvisorModule(new WebAdvisorModule())
-                                                            .build();
+        webAdvisorComponent = DaggerWebAdvisorComponent.builder()
+                                                       .applicationComponent(getApplicationComponent())
+                                                       .activityModule(getActivityModule())
+                                                       .webAdvisorModule(new WebAdvisorModule())
+                                                       .build();
+        webAdvisorComponent.inject(this);
     }
 }
