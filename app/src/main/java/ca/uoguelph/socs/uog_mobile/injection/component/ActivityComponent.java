@@ -1,6 +1,7 @@
 package ca.uoguelph.socs.uog_mobile.injection.component;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import ca.uoguelph.socs.uog_mobile.injection.module.ActivityModule;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
 import ca.uoguelph.socs.uog_mobile.ui.activity.DispatchActivity;
@@ -13,6 +14,8 @@ import dagger.Component;
 public interface ActivityComponent {
     //Exposed to sub-graphs.
     Context activity();
+
+    FragmentManager manager();
 
     void inject(DispatchActivity activity);
 }

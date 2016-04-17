@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.ViewGroup;
 import butterknife.Bind;
@@ -12,6 +13,7 @@ import butterknife.ButterKnife;
 import ca.uoguelph.socs.uog_mobile.R;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.WebAdvisorService;
 import ca.uoguelph.socs.uog_mobile.events.LoggedIn;
+import ca.uoguelph.socs.uog_mobile.events.RefreshSchedule;
 import ca.uoguelph.socs.uog_mobile.injection.HasComponent;
 import ca.uoguelph.socs.uog_mobile.injection.component.DaggerWebAdvisorComponent;
 import ca.uoguelph.socs.uog_mobile.injection.component.WebAdvisorComponent;
@@ -26,34 +28,30 @@ import rx.subscriptions.CompositeSubscription;
 public class WebAdvisorActivity extends BaseActivity implements HasComponent {
 
     @Inject SharedPreferences prefs;
+    @Inject FragmentManager supportFragmentManager;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.frag_container) ViewGroup fragContainer;
 
     private WebAdvisorComponent webAdvisorComponent;
     private CompositeSubscription eventSub;
     private Parcelable user;
-    private FragmentManager supportFragmentManager;
+    private Fragment currentFragment;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         setSupportActionBar(toolbar);
 
         this.initializeInjection();
 
-        supportFragmentManager = this.getSupportFragmentManager();
-        user = savedInstanceState != null ? savedInstanceState.getParcelable("user")
-              : getIntent().getParcelableExtra("user");
-
         if (savedInstanceState == null) {
-            Fragment frag = prefs.contains(WebAdvisorService.SCHEDULE_KEY)
-                  ? WebAdvisorScheduleFragment.newInstance()
-                  : WebAdvisorLoginFragment.newInstance(user);
-
-            supportFragmentManager.beginTransaction().add(R.id.frag_container, frag).commit();
+            user = getIntent().getParcelableExtra("user");
+            replaceFragment(prefs.contains(WebAdvisorService.SCHEDULE_KEY)
+                                  ? WebAdvisorScheduleFragment.newInstance()
+                                  : WebAdvisorLoginFragment.newInstance(user));
+        } else {
+            user = savedInstanceState.getParcelable("user");
         }
     }
 
@@ -61,6 +59,7 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
         super.onResume();
         eventSub = new CompositeSubscription();
         eventSub.add(loggedInSub());
+        eventSub.add(refreshScheduleSub());
     }
 
     @Override protected void onPause() {
@@ -77,14 +76,25 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
         return this.webAdvisorComponent;
     }
 
+    private Subscription refreshScheduleSub() {
+        return bus.observeEvent(RefreshSchedule.class)
+                  .subscribe(refresh -> replaceFragment(WebAdvisorLoginFragment.newInstance(user)));
+    }
+
     private Subscription loggedInSub() {
-        return bus.observeEvent(LoggedIn.class).subscribe(loggedIn -> {
-            supportFragmentManager.beginTransaction()
-                                  .replace(R.id.frag_container,
-                                           WebAdvisorScheduleFragment.newInstance())
-                                  .addToBackStack(null)
-                                  .commit();
-        });
+        return bus.observeEvent(LoggedIn.class)
+                  .subscribe(loggedIn -> replaceFragment(WebAdvisorScheduleFragment.newInstance()));
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = supportFragmentManager.beginTransaction();
+
+        if (currentFragment != null) {
+            transaction = transaction.remove(currentFragment);
+        }
+
+        transaction.add(R.id.frag_container, fragment).addToBackStack(null).commit();
+        currentFragment = fragment;
     }
 
     private void initializeInjection() {

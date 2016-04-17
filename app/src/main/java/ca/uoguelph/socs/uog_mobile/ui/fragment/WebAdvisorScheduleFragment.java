@@ -3,6 +3,9 @@ package ca.uoguelph.socs.uog_mobile.ui.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -10,6 +13,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import ca.uoguelph.socs.uog_mobile.R;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.WebAdvisorService;
+import ca.uoguelph.socs.uog_mobile.events.RefreshSchedule;
 import ca.uoguelph.socs.uog_mobile.injection.component.WebAdvisorComponent;
 import ca.uoguelph.socs.uog_mobile.ui.adapter.ClassScheduleAdapter;
 import ca.uoguelph.socs.uog_mobile.util.RxEventBus;
@@ -40,6 +44,7 @@ public class WebAdvisorScheduleFragment extends BaseFragment {
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,5 +79,20 @@ public class WebAdvisorScheduleFragment extends BaseFragment {
     @Override public void onPause() {
         super.onPause();
         RxUtils.resetSub(subscription);
+    }
+
+    @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.web_advisor_schedule_menu, menu);
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_item_refresh) {
+            webAdvisorService.clearCache();
+            bus.post(new RefreshSchedule());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

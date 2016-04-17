@@ -7,7 +7,6 @@ import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Session;
 import ca.uoguelph.socs.uog_mobile.injection.scope.PerActivity;
 import ca.uoguelph.socs.uog_mobile.util.RxUtils;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import javax.inject.Inject;
 import retrofit2.Retrofit;
 import retrofit2.http.Body;
@@ -16,6 +15,7 @@ import retrofit2.http.POST;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+import timber.log.Timber;
 
 /**
  * Created by julianhorvat on 2016-01-25.
@@ -44,7 +44,14 @@ import rx.schedulers.Schedulers;
                                                         .doOnNext(cacheScheduleInMemory())
                                                         .doOnNext(cacheScheduleOnDisk())
                                                         .subscribeOn(Schedulers.newThread()))
+                                     .take(1)
                                      .compose(RxUtils.applySchedulers());
+    }
+
+    public synchronized void clearCache() {
+        Timber.d("Clearing cache");
+        this.schedule = null;
+        prefs.edit().remove(SCHEDULE_KEY).apply();
     }
 
     @NonNull private Action1<Schedule> cacheScheduleOnDisk() {
@@ -65,7 +72,7 @@ import rx.schedulers.Schedulers;
 
     @NonNull private Observable<Schedule> getScheduleFromCache() {
         return getScheduleFromMemory().concatWith(getScheduleFromDisk().doOnNext(
-              cacheScheduleInMemory())).take(1);
+              cacheScheduleInMemory()));
     }
 
     @NonNull private Observable<Schedule> getScheduleFromMemory() {
@@ -84,11 +91,8 @@ import rx.schedulers.Schedulers;
         return Observable.create(subscriber -> {
             synchronized (WebAdvisorService.this) {
                 if (prefs.contains(SCHEDULE_KEY)) {
-                    Schedule schedule = gson.fromJson(prefs.getString(SCHEDULE_KEY, null),
-                                                      new TypeToken<Schedule>() {
-                                                      }.getType());
-                    //gson.fromJson(prefs.getString(SCHEDULE_KEY, null), Schedule.class);
-
+                    Schedule schedule =
+                          gson.fromJson(prefs.getString(SCHEDULE_KEY, null), Schedule.class);
                     subscriber.onNext(schedule);
                 }
 
