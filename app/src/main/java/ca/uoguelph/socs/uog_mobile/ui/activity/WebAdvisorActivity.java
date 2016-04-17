@@ -1,9 +1,10 @@
 package ca.uoguelph.socs.uog_mobile.ui.activity;
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.ViewGroup;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import ca.uoguelph.socs.uog_mobile.R;
@@ -26,9 +27,12 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
     private static final String TAG_WA_SCHEDULE = "WAScheduleFrag";
 
     @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.frag_container) ViewGroup fragContainer;
 
     private WebAdvisorComponent webAdvisorComponent;
     private CompositeSubscription eventSub;
+    private Parcelable user;
+    private FragmentManager supportFragmentManager;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +43,16 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
 
         this.initializeInjection();
 
-        final WebAdvisorLoginFragment loginFragment = new WebAdvisorLoginFragment();
-        final Bundle loginArgs = new Bundle();
-        loginArgs.putParcelable("user", this.getIntent().getParcelableExtra("user"));
-        loginFragment.setArguments(loginArgs);
-        replaceFragment(R.id.frag_container, TAG_WA_LOGIN, loginFragment, false);
+        supportFragmentManager = this.getSupportFragmentManager();
+        user = savedInstanceState != null ? savedInstanceState.getParcelable("user")
+              : getIntent().getParcelableExtra("user");
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                                  .add(R.id.frag_container,
+                                       WebAdvisorLoginFragment.newInstance(user))
+                                  .commit();
+        }
     }
 
     @Override protected void onResume() {
@@ -58,24 +67,9 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
         RxUtils.resetSub(eventSub);
     }
 
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    @Override protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("user", user);
     }
 
     @Override public Object getComponent() {
@@ -90,10 +84,11 @@ public class WebAdvisorActivity extends BaseActivity implements HasComponent {
 
     private Subscription loggedInSub() {
         return bus.observeEvent(LoggedIn.class).subscribe(loggedIn -> {
-            replaceFragment(R.id.frag_container,
-                            TAG_WA_SCHEDULE,
-                            new WebAdvisorScheduleFragment(),
-                            false);
+            supportFragmentManager.beginTransaction()
+                                  .replace(R.id.frag_container,
+                                           WebAdvisorScheduleFragment.newInstance())
+                                  .addToBackStack(null)
+                                  .commit();
         });
     }
 

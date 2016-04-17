@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,16 @@ public class WebAdvisorLoginFragment extends BaseFragment {
     @Bind(R.id.hero_text) TextView loadingHero;
 
     private User user;
+
+    public static WebAdvisorLoginFragment newInstance(Parcelable user) {
+        WebAdvisorLoginFragment frag = new WebAdvisorLoginFragment();
+        Bundle args = new Bundle();
+
+        args.putParcelable("user", user);
+        frag.setArguments(args);
+
+        return frag;
+    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

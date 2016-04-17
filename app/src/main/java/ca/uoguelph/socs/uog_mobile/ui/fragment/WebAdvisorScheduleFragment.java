@@ -10,12 +10,13 @@ import butterknife.ButterKnife;
 import ca.uoguelph.socs.uog_mobile.R;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.WebAdvisorService;
 import ca.uoguelph.socs.uog_mobile.data.web_advisor.models.Schedule;
-import ca.uoguelph.socs.uog_mobile.events.ShowCourseDetails;
 import ca.uoguelph.socs.uog_mobile.injection.component.WebAdvisorComponent;
 import ca.uoguelph.socs.uog_mobile.ui.adapter.ClassScheduleAdapter;
 import ca.uoguelph.socs.uog_mobile.util.RxEventBus;
+import ca.uoguelph.socs.uog_mobile.util.RxUtils;
 import javax.inject.Inject;
 import rx.Observable;
+import rx.Subscription;
 import timber.log.Timber;
 
 /**
@@ -32,6 +33,11 @@ public class WebAdvisorScheduleFragment extends BaseFragment {
     @Bind(R.id.class_list) RecyclerView recyclerView;
 
     private Schedule schedule;
+    private Subscription subscription;
+
+    public static WebAdvisorScheduleFragment newInstance() {
+        return new WebAdvisorScheduleFragment();
+    }
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,19 +61,24 @@ public class WebAdvisorScheduleFragment extends BaseFragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(scheduleAdapter);
         recyclerView.setHasFixedSize(true);
-
-        scheduleAdapter.setOnItemClickListener(course -> bus.post(new ShowCourseDetails(course)));
     }
 
     @Override public void onResume() {
         super.onResume();
-        Observable.just(schedule)
-                  .mergeWith(webAdvisorService.getSchedule())
-                  .filter(s -> s != null)
-                  .subscribe(s -> {
-                      schedule = s;
-                      scheduleAdapter.setClassSchedule(schedule.courses());
-                  }, throwable -> Timber.e(throwable, "Something failed"));
+        subscription = Observable.just(schedule)
+                                 .mergeWith(webAdvisorService.getSchedule())
+                                 .filter(s -> s != null)
+                                 .doOnSubscribe(() -> Timber.d("Fetching schedule"))
+                                 .subscribe(s -> {
+                                                schedule = s;
+                                                scheduleAdapter.setClassSchedule(schedule.courses());
+                                            },
+                                            throwable -> Timber.e(throwable, "Something failed"));
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+        RxUtils.resetSub(subscription);
     }
 
     @Override public void onSaveInstanceState(Bundle outState) {
